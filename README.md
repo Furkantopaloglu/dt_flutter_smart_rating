@@ -68,16 +68,27 @@ class _MyAppState extends State<MyApp> {
 
 ### 2. Monitor Network
 
-#### Using Dio
+#### Using Dio (Optional)
 
-Add the `SmartRatingDioInterceptor` to your Dio instance:
+If your project uses Dio, first add it to your app's `pubspec.yaml`:
+
+```yaml
+dependencies:
+  dio: ^5.4.1
+```
+
+Then import the interceptor separately and add it to your Dio instance:
 
 ```dart
+import 'package:dt_flutter_smart_rating/src/network/smart_rating_dio_interceptor.dart';
+
 final dio = Dio();
 dio.interceptors.add(SmartRatingDioInterceptor());
 ```
 
-#### Manual Reporting
+> **Note**: The Dio interceptor is not exported from the main package to avoid compilation errors when Dio is not installed. In production, copy `lib/src/network/smart_rating_dio_interceptor.dart` to your own project, or import it directly (which may trigger a lint warning about implementation imports).
+
+#### Manual Reporting (For non-Dio projects)
 
 If you are not using Dio, you can manually report success or failure:
 

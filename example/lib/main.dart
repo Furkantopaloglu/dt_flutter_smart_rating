@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dt_flutter_smart_rating/dt_flutter_smart_rating.dart';
+import 'package:dt_flutter_smart_rating/src/network/smart_rating_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 
 void main() {
