@@ -4,7 +4,7 @@ A smart rating dialog package for Flutter that prompts users to rate the app bas
 
 ## Features
 
-- **Smart Triggering**: Shows the rating dialog only after a period of successful network activity (default 10 minutes).
+- **Smart Triggering**: Shows the rating dialog only after a period of successful network activity (default 5 seconds).
 - **Network Monitoring**: Automatically monitors network traffic using a Dio interceptor (or manual reporting).
 - **Conditional Logic**:
     - **4-5 Stars**: Redirects the user to the store.
@@ -137,7 +137,7 @@ void onUserCompletedOrder() {
 | `navigatorKey` | `GlobalKey<NavigatorState>?` | `null` | Key to show dialog without context. |
 | `appIcon` | `Widget?` | `null` | Icon to show in the dialog. |
 | `dialogInterval` | `Duration` | 30 days | Minimum time between showing the dialog. |
-| `waitDurationAfterSuccess` | `Duration` | 10 mins | Time to wait after reaching minimum success count. |
+| `waitDurationAfterSuccess` | `Duration` | 5 seconds | Time to wait after reaching minimum success count. |
 | `minimumSuccessfulRequests` | `int` | 20 | Number of consecutive successful requests needed. Any failure resets this counter. |
 | `autoTrigger` | `bool` | `true` | Whether to automatically show dialog. Set to `false` for manual control. |
 | `localizations` | `SmartRatingLocalizations` | Default | Custom text strings. |
