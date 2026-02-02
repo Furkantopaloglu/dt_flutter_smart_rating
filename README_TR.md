@@ -137,10 +137,17 @@ Ardından diyaloğu istediğiniz zaman manuel olarak gösterin:
 // Temel kullanım - Diyaloğu istediğiniz zaman gösterin (yine de dialogInterval'a saygı duyar)
 await SmartRating().showRatingDialog();
 
-// Örnek: Kullanıcı bir işlemi tamamladıktan sonra göster
+// Örnek: Kullanıcı bir işlemi tamamladıktan sonra geri bildirim callback'i ile göster
 void onUserCompletedOrder() {
   // ... mantığınız
-  SmartRating().showRatingDialog();
+  SmartRating().showRatingDialog(
+    onSubmitFeedback: (feedback) async {
+       // Geri bildirimi backend'inize veya analitik sisteminize gönderin
+       debugPrint('Kullanıcı geri bildirimi: $feedback');
+       
+       // Burada özel bir teşekkür mesajı gösterebilir veya başka işlemler yapabilirsiniz
+    },
+  );
 }
 ```
 

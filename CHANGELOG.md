@@ -1,3 +1,8 @@
+## 0.0.3
+
+### ✨ New Features
+* **Custom Feedback Handling**: Added `onSubmitFeedback` callback to `showRatingDialog()`, allowing developers to process user feedback (e.g., sending to a backend or analytics service).
+
 ## 0.0.2
 
 ### ✨ New Features

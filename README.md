@@ -137,10 +137,17 @@ Then show the dialog manually whenever you want:
 // Basic usage - Show dialog at any time (still respects dialogInterval)
 await SmartRating().showRatingDialog();
 
-// Example: Show after user completes an action
+// Example: Show after user completes an action with a feedback callback
 void onUserCompletedOrder() {
   // ... your logic
-  SmartRating().showRatingDialog();
+  SmartRating().showRatingDialog(
+    onSubmitFeedback: (feedback) async {
+       // Send feedback to your backend or analytics
+       debugPrint('User feedback: $feedback');
+       
+       // You can show a custom thank you message or perform other actions here
+    },
+  );
 }
 ```
 
