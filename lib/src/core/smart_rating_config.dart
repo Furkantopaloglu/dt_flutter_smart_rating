@@ -60,6 +60,7 @@ class SmartRatingLocalizations {
   final String feedbackDescription;
   final String feedbackHint;
   final String submitFeedbackButtonText;
+  final String thankYouMessage;
   final String successMessage;
 
   const SmartRatingLocalizations({
@@ -73,6 +74,7 @@ class SmartRatingLocalizations {
     this.feedbackDescription = 'Please tell us how we can improve.',
     this.feedbackHint = 'Enter your feedback here...',
     this.submitFeedbackButtonText = 'Submit',
+    this.thankYouMessage = 'Thank You!',
     this.successMessage =
         'We appreciate your feedback and will use it to improve your experience!',
   });
