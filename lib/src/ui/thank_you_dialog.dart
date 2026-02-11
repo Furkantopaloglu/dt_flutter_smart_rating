@@ -110,7 +110,7 @@ class _ThankYouDialogState extends State<ThankYouDialog>
                 const SizedBox(height: 24),
                 // Thank you message
                 Text(
-                  'Teşekkür Ederiz!',
+                  loc.thankYouMessage,
                   style:
                       theme.titleStyle?.copyWith(fontSize: 28) ??
                       const TextStyle(
