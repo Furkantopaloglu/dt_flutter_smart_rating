@@ -1,3 +1,8 @@
+## 0.0.4
+
+* **Breaking Change**: Removed `dio` dependency and `SmartRatingDioInterceptor`. Applications should now manually report network activity or implement their own interceptor (see `lib/src/network/README.md` for examples).
+* **Configuration**: Updated SDK constraints and project metadata.
+
 ## 0.0.3
 
 ### ✨ New Features
