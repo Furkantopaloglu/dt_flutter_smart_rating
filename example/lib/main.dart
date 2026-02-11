@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dt_flutter_smart_rating/dt_flutter_smart_rating.dart';
-import 'package:dt_flutter_smart_rating/src/network/smart_rating_dio_interceptor.dart';
-import 'package:dio/dio.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,34 +59,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final Dio _dio = Dio();
-
   @override
   void initState() {
     super.initState();
-    _dio.interceptors.add(SmartRatingDioInterceptor());
   }
 
   // --- Simulation Methods ---
 
   Future<void> _simulateSuccess() async {
-    try {
-      // Mocking a successful request
-      await _dio.get('https://mock.httpstatus.io/200');
-      _showSnackbar('Request Success! (+1 Success)');
-    } catch (e) {
-      debugPrint('Error: $e');
-    }
+    // Manually reporting success
+    SmartRating().reportNetworkSuccess();
+    _showSnackbar('Request Success Reported! (+1 Success)');
     setState(() {}); // Update UI to show new stats
   }
 
   Future<void> _simulateFailure() async {
-    try {
-      // Mocking a failed request
-      await _dio.get('https://mock.httpstatus.io/500');
-    } catch (e) {
-      _showSnackbar('Request Failed! (+1 Failure, Success Reset)');
-    }
+    // Manually reporting failure
+    SmartRating().reportNetworkFailure();
+    _showSnackbar('Request Failure Reported! (+1 Failure, Success Reset)');
     setState(() {}); // Update UI to show new stats
   }
 
@@ -102,9 +90,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _showOnlyIfNoFailures() async {
     await SmartRating().showRatingDialog(onlyIfNoFailures: true);
-    // Dialog handles its own display logic. If it doesn't show, it logs to console.
-    // We can't easily know if it showed or not without complex logic,
-    // but the user will see the dialog if conditions met.
   }
 
   Future<void> _showIfMinSuccessReached() async {
@@ -127,11 +112,13 @@ class _HomePageState extends State<HomePage> {
         await Future.delayed(const Duration(seconds: 1));
         if (!mounted) return;
         Navigator.of(context).pop(); // Close the dialog
-        if (SmartRating().config != null) {
+
+        final config = SmartRating().config;
+        if (config != null) {
           await showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (context) => ThankYouDialog(config: SmartRating().config!),
+            builder: (context) => ThankYouDialog(config: config),
           );
         }
       },
@@ -159,7 +146,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Smart Rating v0.0.2 Demo'),
+        title: const Text('Smart Rating Demo'),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
@@ -176,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     const Text(
-                      '📊 Network Stats',
+                      '📊 Manual Stats Simulation',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -217,7 +204,7 @@ class _HomePageState extends State<HomePage> {
 
             // --- Simulation Controls ---
             const Text(
-              '1. Network Simulation',
+              '1. Manual Reporting Simulation',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
@@ -227,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                   child: FilledButton.icon(
                     onPressed: _simulateSuccess,
                     icon: const Icon(Icons.check_circle),
-                    label: const Text('Success (+1)'),
+                    label: const Text('Report Success'),
                     style: FilledButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
@@ -238,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                   child: FilledButton.icon(
                     onPressed: _simulateFailure,
                     icon: const Icon(Icons.error),
-                    label: const Text('Failure (+1)'),
+                    label: const Text('Report Failure'),
                     style: FilledButton.styleFrom(backgroundColor: Colors.red),
                   ),
                 ),

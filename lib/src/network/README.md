@@ -1,28 +1,8 @@
 # Network Monitoring
 
-## Dio Interceptor
+To report network activity to `SmartRating`, simply call the manual reporting methods in your network layer:
 
-The `SmartRatingDioInterceptor` is provided for convenience if your project uses Dio.
-
-### Important: Optional Dependency
-
-**Dio is NOT a required dependency of this package.** If you want to use the Dio interceptor, you must add Dio to your app's `pubspec.yaml`:
-
-```yaml
-dependencies:
-  dio: ^5.4.1  # or your preferred version
-```
-
-### Usage
-
-```dart
-final dio = Dio();
-dio.interceptors.add(SmartRatingDioInterceptor());
-```
-
-### For Other HTTP Clients
-
-If you use a different HTTP client (http, chopper, etc.), simply call the manual reporting methods:
+### Basic Usage
 
 ```dart
 // On successful response (2xx)
@@ -30,4 +10,39 @@ SmartRating().reportNetworkSuccess();
 
 // On error response
 SmartRating().reportNetworkFailure();
+```
+
+### Integration Examples
+
+#### Using Dio
+If you use [Dio](https://pub.dev/packages/dio), you can add a simple interceptor in your own codebase:
+
+```dart
+class SmartRatingInterceptor extends Interceptor {
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    SmartRating().reportNetworkSuccess();
+    super.onResponse(response, handler);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    SmartRating().reportNetworkFailure();
+    super.onError(err, handler);
+  }
+}
+
+// Then add it to your dio instance:
+final dio = Dio();
+dio.interceptors.add(SmartRatingInterceptor());
+```
+
+#### Using http package
+```dart
+final response = await http.get(Uri.parse('https://example.com'));
+if (response.statusCode >= 200 && response.statusCode < 300) {
+  SmartRating().reportNetworkSuccess();
+} else {
+  SmartRating().reportNetworkFailure();
+}
 ```
