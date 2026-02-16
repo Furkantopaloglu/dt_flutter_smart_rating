@@ -1,11 +1,11 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dt_flutter_smart_rating/dt_flutter_smart_rating.dart';
-import 'package:dt_flutter_smart_rating/src/ui/thank_you_dialog.dart';
 
 void main() {
   testWidgets('ThankYouDialog displays correctly', (WidgetTester tester) async {
-    final config = SmartRatingConfig(
+    const config = SmartRatingConfig(
       appName: 'Test App',
       storeUrl: 'https://test.com',
     );
@@ -26,7 +26,7 @@ void main() {
   });
 
   testWidgets('ThankYouDialog auto-dismisses', (WidgetTester tester) async {
-    final config = SmartRatingConfig(
+    const config = SmartRatingConfig(
       appName: 'Test App',
       storeUrl: 'https://test.com',
     );
