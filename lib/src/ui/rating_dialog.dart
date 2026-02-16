@@ -8,11 +8,7 @@ class RatingDialog extends StatefulWidget {
   final SmartRatingConfig config;
   final Future<void> Function(String feedback)? onSubmitFeedback;
 
-  const RatingDialog({
-    super.key,
-    required this.config,
-    this.onSubmitFeedback,
-  });
+  const RatingDialog({super.key, required this.config, this.onSubmitFeedback});
 
   @override
   State<RatingDialog> createState() => _RatingDialogState();
@@ -74,8 +70,8 @@ class _RatingDialogState extends State<RatingDialog>
     } else {
       debugPrint('Could not launch ${widget.config.storeUrl}');
     }
-    if (!mounted) return;
 
+    if (!mounted) return;
     // Show thank you dialog before closing
     await showDialog(
       context: context,
@@ -101,6 +97,7 @@ class _RatingDialogState extends State<RatingDialog>
       // Small delay to ensure dialog is closed
       await Future.delayed(const Duration(milliseconds: 100));
 
+      if (!mounted) return;
       await showDialog(
         context: context,
         barrierDismissible: false,
@@ -213,7 +210,7 @@ class _RatingDialogState extends State<RatingDialog>
         // Account for scale animation (1.1x) and margins
         final availableWidth =
             constraints.maxWidth - 32; // Extra padding buffer
-        final totalStars = 5;
+        const totalStars = 5;
         final totalSpacing = theme.starSpacing * (totalStars - 1);
         final maxStarSize = (availableWidth - totalSpacing) / totalStars;
         // Reduce by 20% to account for scale animation and ensure no overflow
