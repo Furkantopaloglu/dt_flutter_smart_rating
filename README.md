@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/smart_rating_icon.png" width="120" height="120" alt="Smart Rating Logo">
+  <img src="assets/smart_rating_icon.png" width="240" height="240" alt="Smart Rating Logo">
 </p>
 
 # Smart Rating for Flutter
