@@ -90,20 +90,22 @@ class _RatingDialogState extends State<RatingDialog>
 
     if (widget.onSubmitFeedback != null) {
       await widget.onSubmitFeedback!(feedbackText);
-    } else {
-      // Close rating dialog
-      Navigator.of(context).pop('feedback: $feedbackText');
-
-      // Small delay to ensure dialog is closed
-      await Future.delayed(const Duration(milliseconds: 100));
-
-      if (!mounted) return;
-      await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => ThankYouDialog(config: widget.config),
-      );
     }
+
+    if (!mounted) return;
+
+    // Close rating dialog and show thank you dialog
+    Navigator.of(context).pop('feedback: $feedbackText');
+
+    // Small delay to ensure dialog is closed
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    if (!mounted) return;
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => ThankYouDialog(config: widget.config),
+    );
   }
 
   @override
@@ -154,9 +156,7 @@ class _RatingDialogState extends State<RatingDialog>
                   ),
                 ],
                 Text(
-                  _showFeedback
-                      ? loc.feedbackTitle
-                      : loc.title.replaceAll('%s', widget.config.appName),
+                  loc.title.replaceAll('%s', widget.config.appName),
                   style:
                       theme.titleStyle ??
                       const TextStyle(
@@ -167,22 +167,17 @@ class _RatingDialogState extends State<RatingDialog>
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  _showFeedback
-                      ? loc.feedbackDescription
-                      : loc.description.replaceAll('%s', widget.config.appName),
+                  loc.description.replaceAll('%s', widget.config.appName),
                   textAlign: TextAlign.center,
                   style:
                       theme.descriptionStyle ??
                       TextStyle(fontSize: 14, color: Colors.grey[600]),
                 ),
                 const SizedBox(height: 28),
-                if (!_showFeedback) ...[
-                  _buildStarRating(theme),
-                  const SizedBox(height: 24),
-                  _buildSecondaryButton(loc.laterButtonText, theme, () {
-                    Navigator.of(context).pop();
-                  }),
-                ] else ...[
+                _buildStarRating(theme),
+                const SizedBox(height: 24),
+                // Show feedback input if rating < 4
+                if (_showFeedback) ...[
                   _buildFeedbackInput(loc, theme),
                   const SizedBox(height: 20),
                   _buildPrimaryButton(
@@ -191,10 +186,11 @@ class _RatingDialogState extends State<RatingDialog>
                     _submitFeedback,
                   ),
                   const SizedBox(height: 10),
-                  _buildSecondaryButton(loc.laterButtonText, theme, () {
-                    Navigator.of(context).pop();
-                  }),
                 ],
+                // Always show Later button
+                _buildSecondaryButton(loc.laterButtonText, theme, () {
+                  Navigator.of(context).pop();
+                }),
               ],
             ),
           ),
@@ -206,17 +202,13 @@ class _RatingDialogState extends State<RatingDialog>
   Widget _buildStarRating(SmartRatingTheme theme) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Calculate available width and adjust star size if needed
-        // Account for scale animation (1.1x) and margins
-        final availableWidth =
-            constraints.maxWidth - 32; // Extra padding buffer
+        final availableWidth = constraints.maxWidth - 32;
         const totalStars = 5;
         final totalSpacing = theme.starSpacing * (totalStars - 1);
         final maxStarSize = (availableWidth - totalSpacing) / totalStars;
-        // Reduce by 20% to account for scale animation and ensure no overflow
         final effectiveStarSize =
             (maxStarSize < theme.starSize ? maxStarSize : theme.starSize) *
-            0.95;
+                0.95;
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
